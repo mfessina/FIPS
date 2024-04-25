@@ -5,7 +5,7 @@ This repository provides the code implementation for the paper:
 
 that introduces the Feature Importance Product Space.
 
-# CODE
+# Code
 
 The code is organized into three functions: 
 
