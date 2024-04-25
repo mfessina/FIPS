@@ -1,0 +1,61 @@
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import KFold
+
+
+def feature_importance(X_train,y_train,X_test,y_test,n_folds,n_rep,n_perm):
+    
+    #X_train: numpy array of shape [n_observation,n_features], containing, for each training observation, the feature vector
+    #y_train: numpy array of shape [n_features], containing, for each training observation, its class
+    #X_test: numpy array of shape [n_observation,n_features], containing, for each test observation, the feature vector
+    #y_test: numpy array of shape [n_features], containing, for each test observation, its class
+    #n_folds: number of folds for the K-Fold Cross Validation procedure
+    #n_rep: number of times the importance of each feature has to be computed
+    #n_perm: number of times the permuted importance of each feature has to be computed 
+    
+    #The function returns:
+    #gi_imp: array of shape [n_rep,n_features], containing n_rep of the importance value of each feature
+    #gi_perm_imp: array of shape [n_perm,n_features], containing n_perm of the permuted importance value of each feature
+    
+    model = RandomForestClassifier()
+    n_features = X_train.shape[1]
+    
+    #Definition of the matrices storing the gini importance values (gi_imp), and the permuted gini importance values (gi_perm_imp)
+    gi_imp = np.zeros((n_rep,n_features))
+    gi_perm_imp = np.zeros((n_perm,n_features))
+    
+    for r in range(n_rep):
+        
+        #Temporary array to store the gini importance values computed on each fold of the CV
+        
+        temp_imp = np.zeros(n_features)
+        
+        kf = KFold(n_splits=n_folds, shuffle=True)
+        
+        #The importance values computed on every fold of the CV are summed
+        
+        for train, test in kf.split(X_test, y_test):
+            model.fit(X_train, y_train)
+            temp_imp += model.feature_importances_
+            
+        gi_imp[r,:] = temp_imp
+    
+    
+        
+    for j in range(n_perm):
+        
+        #Temporary array to store the permuted gini importance values computed on each fold of the CV
+        
+        temp_null_imp = np.zeros(n_features)
+             
+        kf = KFold(n_splits=n_folds, shuffle=True)
+        
+        #The importance values computed on every fold of the CV are summed
+        
+        for train, test in kf.split(X_test, y_test):
+            model.fit(X_train, y_train)
+            temp_null_imp += model.feature_importances_
+            
+        gi_perm_imp[j,:] = temp_null_imp
+
+    return gi_imp, gi_perm_imp
