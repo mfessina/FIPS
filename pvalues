@@ -1,0 +1,24 @@
+def pvalues(gi_imp,gi_perm_imp):
+    
+    #gi_imp: array of shape [n_rep,n_features], containing n_rep of the importance value of each feature
+    #gi_perm_imp: array of shape [n_perm,n_features], containing n_perm of the permuted importance value of each feature
+    
+    #The function returns pvalues, an array of shape [n_rep,n_features] containing the n_rep pvalues of the importance values
+    #of each feature
+    
+    n_rep = gi_imp.shape[0]
+    n_perm = gi_perm_imp.shape[0]
+    n_features = gi_imp.shape[1]
+    
+    pvalues = np.zeros((n_rep, n_features))
+
+    for j in range(n_features):
+        for i in range(n_rep):
+        
+            imp = gi_imp[i,j]
+            perm = gi_perm_imp[:,j]
+            P = np.size(np.where(perm > imp))
+            p = P/n_perm
+            pvalues[i,j] = p
+            
+    return pvalues
