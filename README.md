@@ -9,3 +9,10 @@ that introduces the Feature Importance Product Space.
 
 The code is organized into three functions: 
 
+- read_csv_from_url(url_files, start_year, last_year): load and clean export data from the repository https://github.com/giamba95/SaplingSimilarity/tree/main/data
+
+- feature_importance(X_train,y_train,X_test,y_test,n_folds,n_rep,n_perm): compute feature importance values and the corresponding null distributions for a Random Forest classifier
+
+- pvalues(gi_imp,gi_perm_imp): compute the p-values to validate feature importance values
+
+Details on the input variables and output of the three functions are reported as comments in the corresponding codes.
