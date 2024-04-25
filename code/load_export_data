@@ -1,12 +1,13 @@
+import pandas as pd
+
 def read_csv_from_url(url_files='https://raw.githubusercontent.com/giamba95/SaplingSimilarity/main/data/RCA/RCA{}.csv', start_year=1996, last_year=2018):
     
-    #Reads CSV files into pandas DataFrames for a specified range of years and returns a list of these DataFrames.
-    Parameters:
-    - url (str): Template URL for the CSV files, with {} as a placeholder for the year. Defaults to the RCA dataset URL.
-    - start_year (int): The first year in the range of files to be read. Defaults to 1996.
-    - last_year (int): The last year in the range of files to be read. This year is inclusive. Defaults to 2018.
-    Returns:
-    - list: A list of pandas DataFrames, each containing the data from one year's CSV file."""
+    #url (str): Template URL for the CSV files, with {} as a placeholder for the year. Defaults to the RCA dataset URL.
+    #start_year (int): The first year in the range of files to be read. Defaults to 1996.
+    #last_year (int): The last year in the range of files to be read. This year is inclusive. Defaults to 2018.
+    
+    #The function returns:
+    #df_list: a list of pandas DataFrames, each containing the data from one year's CSV file."""
     
     url_prods='https://drive.google.com/file/d/1mEVAlyiHrY5pfmnYH6yGCSQYyUJp9yOr/view?usp=sharing'
     url_prods='https://drive.google.com/uc?id=' + url_prods.split('/')[-2]
@@ -17,15 +18,15 @@ def read_csv_from_url(url_files='https://raw.githubusercontent.com/giamba95/Sapl
     df_countries  = pd.read_csv(url_countries, header=None)
     base_url = url_files
     years = range(start_year, last_year + 1)
-    l_df_rca = []
+    df_list = []
     for year in years:
         url = base_url.format(year)  # Generate URLs and read files into DataFrames
         try:
-            df = pd.read_csv(url, header=None)  
+            df = pd.read_csv(url, header=None)  # Read the CSV file from the URL into a DataFrame 
             df.index= df_countries[0].values
-            df.columns = df_prods[0].values            # Read the CSV file from the URL into a DataFrame            
-            l_df_rca.append(df) # Append the DataFrame to the list
+            df.columns = df_prods[0].values                       
+            df_list.append(df) # Append the DataFrame to the list
             print(f"Loaded data for year {year}")
         except Exception as e:
             print(f"Failed to load data for year {year} - Error: {e}")    
-    return l_df_rca
+    return df_list
